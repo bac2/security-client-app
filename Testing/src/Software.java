@@ -24,6 +24,10 @@ public class Software implements Comparable<Software> {
 		this.versionString = versionString;
 	}
 	
+	public String getVersionString() {
+		return versionString;
+	}
+	
 	public String toString() {
 		return "{ name : " + name + ", versionString : " + versionString + " }";
 	}

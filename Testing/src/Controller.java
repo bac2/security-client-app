@@ -4,14 +4,19 @@ import java.util.Arrays;
 public class Controller {
 	
 	Software[] softwareList;
+	MainView main;
 	
 	public Controller(IFileGatherer fileGatherer) {
+		
+		main = new MainView("Security Client");
+		
         softwareList = fileGatherer.getInstalledSoftwareList();
-        Arrays.sort(softwareList);
-        for (Software s : softwareList) {
-        	System.out.println(s);
-        }
+        String jsonEnc = new JSONEncoder().encodeList(softwareList);
+        System.out.println(jsonEnc);
+
 	}
+	
+	//TODO: Implement GUI
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
