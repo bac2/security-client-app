@@ -26,13 +26,18 @@ public class WindowsFileGatherer implements IFileGatherer {
 			soft.setVersionString(match.group(0).split("    ")[2]);
 		}
 	}
+	
 	public void getSoftwareFromOS() {
+		runRegCommand("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall /s /f Display*");
+		runRegCommand("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall /s /f Display*");
 		
+	}
+	
+	private void runRegCommand(String query) {
 		try {
-			
 			// Run reg query, then read output with StreamReader (internal class)
-	        //Process process = Runtime.getRuntime().exec("reg QUERY HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall /s /f Display*");
-	        Process process = Runtime.getRuntime().exec("reg QUERY HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall /s /f Display*");
+	        
+	        Process process = Runtime.getRuntime().exec("reg QUERY " + query);
 	        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
 	        String line = "";
 	        Pattern itemStart = Pattern.compile("HKEY.*");
@@ -46,7 +51,9 @@ public class WindowsFileGatherer implements IFileGatherer {
 	        			getDisplayName(s, line);
 	        			getDisplayVersion(s, line);
 	        		}
-	        		softwareList.add(s);
+	        		if (s.getName() != null) {
+	        			softwareList.add(s);
+	        		}
 	        	}
 	        }
 	        

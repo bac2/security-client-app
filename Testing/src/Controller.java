@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 
 public class Controller {
 	
@@ -5,6 +7,7 @@ public class Controller {
 	
 	public Controller(IFileGatherer fileGatherer) {
         softwareList = fileGatherer.getInstalledSoftwareList();
+        Arrays.sort(softwareList);
         for (Software s : softwareList) {
         	System.out.println(s);
         }

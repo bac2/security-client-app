@@ -1,5 +1,5 @@
 
-public class Software {
+public class Software implements Comparable<Software> {
 	private String name;
 	private String versionString;
 	
@@ -9,7 +9,11 @@ public class Software {
 	}
 
 	public Software() {
-		// TODO Auto-generated constructor stub
+		
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public void setName(String name) {
@@ -22,5 +26,11 @@ public class Software {
 	
 	public String toString() {
 		return "{ name : " + name + ", versionString : " + versionString + " }";
+	}
+
+	@Override
+	public int compareTo(Software other) {
+		return this.name.toLowerCase().compareTo(
+				other.getName().toLowerCase());
 	}
 }
