@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -8,6 +9,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 
@@ -16,10 +19,13 @@ public class MainView extends JFrame {
 	private JLabel infoLabel;
 	private JList<Software> softwareList;
 	private DefaultListModel<Software> softwareListModel;
+	private Controller controller;
 	
-	public MainView(String title) {
+	public MainView(String title, Controller c) {
 		this.setTitle(title);
+		this.controller = c;
 		init();
+		
 		this.setVisible(true);
 	}
 	
@@ -44,11 +50,24 @@ public class MainView extends JFrame {
 		JMenuItem menuItem = new JMenuItem("Default menu item");
 		menu.add(menuItem);
 		
+		
 		softwareListModel = new DefaultListModel<Software>();
 		softwareList = new JList<Software>(softwareListModel);
 		softwareList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		for (Software s : controller.getSoftwareList()) {
+			softwareListModel.addElement(s);	
+		}
+		JScrollPane scroller = new JScrollPane(softwareList);
+		mainPanel.add(scroller);
 		
-		mainPanel.add(softwareList);
+		JPanel southPanel = new JPanel();
+		JLabel uniqueIdLabel = new JLabel("Device unique ID: ");
+		southPanel.add(uniqueIdLabel);
+		JTextField uniqueIdBox = new JTextField(controller.getUniqueId());
+		uniqueIdBox.setEditable(false);
+		southPanel.add(uniqueIdBox);
+		
+		mainPanel.add(southPanel, BorderLayout.SOUTH);
 		
 	}
 	
