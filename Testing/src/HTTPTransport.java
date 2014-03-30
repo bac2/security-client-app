@@ -1,4 +1,6 @@
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,18 +9,19 @@ import java.net.URLConnection;
 
 public class HTTPTransport implements ITransport {
 
-	private String addr;
+	private String host, addr;
 	private int port;
-	public HTTPTransport() {
-		addr = "http://fridge.lan";
-		port = 5555;
+	public HTTPTransport(String deviceUid) {
+		host = "http://localhost";
+		addr = "/device/" + deviceUid + "/";
+		port = 8000;
 
 	}
 	@Override
 	public void sendString(String data) {
 		URL dest;
 		try {
-			dest = new URL(addr + ":" + port);
+			dest = new URL(host + ":" + port + addr);
 			URLConnection conn = dest.openConnection();
 			conn.setDoOutput(true);
 			OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
@@ -29,6 +32,12 @@ public class HTTPTransport implements ITransport {
 			out.flush();
 			out.close();
 			
+			InputStreamReader in = new InputStreamReader(conn.getInputStream());
+			String inputString = "";
+			while(in.ready()) {
+				inputString += (char) in.read();
+			}
+			System.out.println(inputString);
 			
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
