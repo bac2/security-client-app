@@ -14,7 +14,11 @@ public class Controller {
 	
 	public Controller(IFileGatherer fileGatherer) {
         HMAC hmac = new HMAC();
-        uniqueId = hmac.generateHmac();
+        try {
+			uniqueId = hmac.generateHmac();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
         softwareList = fileGatherer.getInstalledSoftwareList();
         
 		main = new MainView("Security Client", this);
@@ -24,9 +28,9 @@ public class Controller {
         
 
         
-        //System.out.println(jsonEnc);
-        //ITransport transport = new HTTPTransport();
-        //transport.sendString(jsonEnc);
+        System.out.println(jsonEnc);
+        ITransport transport = new HTTPTransport(uniqueId);
+        transport.sendString(jsonEnc);
 	}
 	
 	//TODO: Implement GUI

@@ -5,7 +5,7 @@ public class LinuxFileGatherer implements IFileGatherer {
 	public Software[] getInstalledSoftwareList() {
 		// Get using different approachs on different OSes.
 		// type -P <cmd> is a good one
-		return new Software[1];
+		return new Software[0];
 	}
 
 }

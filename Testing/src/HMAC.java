@@ -4,6 +4,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Enumeration;
 import java.util.Formatter;
 
 import javax.crypto.Mac;
@@ -16,22 +17,34 @@ public class HMAC {
 
 	}
 	
-	public String generateHmac() {
+	public String generateHmac() throws Exception {
 
 		try {
-			InetAddress ip = InetAddress.getLocalHost();
-			String hostname = ip.getHostName();
-			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
-			byte[] macAddress = network.getHardwareAddress();
-			
+			//Find the MAC address of an available interface (eth0 in Linux)
+			Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+			byte[] macAddress = null;
+			String hostname = "";
+			while (en.hasMoreElements() && macAddress == null) {
+				NetworkInterface network = en.nextElement();
+				Enumeration<InetAddress> addresses = network.getInetAddresses();
+				while (addresses.hasMoreElements() && macAddress == null) {
+					InetAddress ip = addresses.nextElement();
+
+					NetworkInterface netinterface = NetworkInterface.getByInetAddress(ip);
+
+					macAddress = netinterface.getHardwareAddress();
+					hostname = ip.getHostName();
+				}
+			}
+			if (macAddress == null) {
+				throw new Exception("Couldn't find any network interfaces");
+			}
+
 			SecretKeySpec signingKey = new SecretKeySpec(macAddress, "HmacSHA1");
 			Mac mac = Mac.getInstance("HmacSHA1");
 			mac.init(signingKey);
 			return toHexString(mac.doFinal(hostname.getBytes()));
 		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SocketException e) {
