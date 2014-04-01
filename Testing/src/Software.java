@@ -2,10 +2,12 @@
 public class Software implements Comparable<Software> {
 	private String name;
 	private String versionString;
+	private String publisher;
 	
-	public Software(String name, String versionString) {
+	public Software(String name, String versionString, String publisher) {
 		this.name = name;
 		this.versionString = versionString;
+		this.publisher = publisher;
 	}
 
 	public Software() {
@@ -24,12 +26,16 @@ public class Software implements Comparable<Software> {
 		this.versionString = versionString;
 	}
 	
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+	
 	public String getVersionString() {
 		return versionString;
 	}
 	
 	public String toString() {
-		return "{ name : " + name + ", versionString : " + versionString + " }";
+		return "{ name : " + name + ", versionString : " + versionString + ", publisher : " + publisher + " }";
 	}
 
 	@Override

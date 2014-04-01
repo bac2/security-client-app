@@ -12,24 +12,32 @@ public class WindowsFileGatherer implements IFileGatherer {
 	List<Software> softwareList = new ArrayList<Software>();
 	
 	public void getDisplayName(Software soft, String line) {
-		Pattern displayName = Pattern.compile("DisplayName.*");
+		Pattern displayName = Pattern.compile("DisplayName    REG_SZ    (.+)");
 		Matcher match = displayName.matcher(line);
 		if (match.find()) {
-			soft.setName(match.group(0).split("    ")[2]);
+			soft.setName(match.group(1));
 		}
 	}
 	
 	public void getDisplayVersion(Software soft, String line) {
-        Pattern displayVersion = Pattern.compile("DisplayVersion.*");
+        Pattern displayVersion = Pattern.compile("DisplayVersion    REG_SZ    (.+)");
 		Matcher match = displayVersion.matcher(line);
 		if (match.find()) {
-			soft.setVersionString(match.group(0).split("    ")[2]);
+			soft.setVersionString(match.group(1));
+		}
+	}
+	
+	public void getPublisher(Software soft, String line) {
+		Pattern publisher = Pattern.compile("Publisher    REG_SZ    (.+)");
+		Matcher match = publisher.matcher(line);
+		if (match.find()) {
+			soft.setPublisher(match.group(1));
 		}
 	}
 	
 	public void getSoftwareFromOS() {
-		runRegCommand("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall /s /f Display*");
-		runRegCommand("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall /s /f Display*");
+		runRegCommand("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall /s /t REG_SZ");
+		runRegCommand("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall /s /t REG_SZ");
 		
 	}
 	
@@ -50,6 +58,7 @@ public class WindowsFileGatherer implements IFileGatherer {
 	        		while (!(line = br.readLine()).equals("") && line != null) {
 	        			getDisplayName(s, line);
 	        			getDisplayVersion(s, line);
+	        			getPublisher(s, line);
 	        		}
 	        		if (s.getName() != null) {
 	        			softwareList.add(s);
