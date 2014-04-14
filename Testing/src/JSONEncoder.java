@@ -1,28 +1,40 @@
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class JSONEncoder implements IEncoder {
-
-	private StringBuffer stringBuffer;
+	private JSONObject obj;
+	private JSONObject meta;
+	
 	public JSONEncoder() {
-		stringBuffer = new StringBuffer("[\n");
-	}
-	
-	public String encodeList(Software[] list) {
-		StringBuffer stringBuffer = new StringBuffer("[\n");
-		for (Software s : list) {
-			stringBuffer.append("{ name: "+ s.getName() + ", versionString: " + s.getVersionString() + " },\n");
-		}
-		
-		return stringBuffer.append("]").toString();
-	}
-	
-	@Override
-	public void addSoftware(Software s) {
-		stringBuffer.append("{ name: "+ s.getName() + ", versionString: " + s.getVersionString() + " },\n");
+		obj = new JSONObject();
+		meta = new JSONObject();
+		obj.put("meta", meta);
 	}
 
+	@SuppressWarnings("unchecked")
+	public void encodeList(Software[] list) {
+		JSONArray arr = new JSONArray();
+		for (Software s : list) {
+			arr.add(s);
+		}
+		obj.put("software", arr);
+	}
+	
 	@Override
 	public String getEncodedList() {
-		return stringBuffer.append("]").toString();
+		return obj.toJSONString();
+	}
+
+	@Override
+	public void encodeDeviceName(String nickname) {
+		meta.put("nickname", nickname);
+		
+	}
+
+	@Override
+	public void encodeOS(String os) {
+		meta.put("os_name", os);
+		
 	}
 
 }

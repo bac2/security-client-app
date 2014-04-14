@@ -1,6 +1,7 @@
 
 public interface IEncoder {
-	public String encodeList(Software[] list);
+	public void encodeList(Software[] list);
 	public String getEncodedList();
-	public void addSoftware(Software s);
+	public void encodeDeviceName(String nickname);
+	public void encodeOS(String os);
 }

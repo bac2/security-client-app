@@ -24,13 +24,15 @@ public class Controller {
 		main = new MainView("Security Client", this);
 		
 
-        String jsonEnc = new JSONEncoder().encodeList(softwareList);
+        JSONEncoder jsonEnc = new JSONEncoder();
+        jsonEnc.encodeList(softwareList);
+        jsonEnc.encodeDeviceName("My Arbitrary Device");
+        jsonEnc.encodeOS(System.getProperty("os.name"));
+        System.out.println(jsonEnc.getEncodedList());
         
 
-        
-        System.out.println(jsonEnc);
         ITransport transport = new HTTPTransport(uniqueId);
-        transport.sendString(jsonEnc);
+        transport.sendString(jsonEnc.getEncodedList());
 	}
 	
 	//TODO: Implement GUI
