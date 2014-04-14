@@ -31,7 +31,7 @@ public class MainView extends JFrame {
 	
 	public void init() {
 		
-		this.setSize(300, 300);
+		this.setSize(800, 300);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		mainPanel = new JPanel();
