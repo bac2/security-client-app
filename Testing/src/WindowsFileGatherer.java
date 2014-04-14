@@ -72,9 +72,9 @@ public class WindowsFileGatherer implements IFileGatherer {
 	}
 	
 	@Override
-	public Software[] getInstalledSoftwareList() {
+	public List<Software> getInstalledSoftwareList() {
 		getSoftwareFromOS();
-		return softwareList.toArray(new Software[0]);
+		return softwareList;
 	}
 
 }

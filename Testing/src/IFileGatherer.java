@@ -1,4 +1,6 @@
+import java.util.List;
+
 
 public interface IFileGatherer {
-	public Software[] getInstalledSoftwareList();
+	public List<Software> getInstalledSoftwareList();
 }

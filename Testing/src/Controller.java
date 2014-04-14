@@ -1,6 +1,7 @@
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -8,7 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Controller {
 	
-	Software[] softwareList;
+	List<Software> softwareList;
 	MainView main;
 	String uniqueId;
 	
@@ -52,7 +53,7 @@ public class Controller {
 		new Controller(fileGatherer);
 	}
 
-	public Software[] getSoftwareList() {
+	public List<Software> getSoftwareList() {
 		return softwareList;
 	}
 

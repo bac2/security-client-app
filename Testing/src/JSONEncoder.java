@@ -1,3 +1,5 @@
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -12,11 +14,9 @@ public class JSONEncoder implements IEncoder {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void encodeList(Software[] list) {
+	public void encodeList(List<Software> softwareList) {
 		JSONArray arr = new JSONArray();
-		for (Software s : list) {
-			arr.add(s);
-		}
+		arr.addAll(softwareList);
 		obj.put("software", arr);
 	}
 	

@@ -1,3 +1,4 @@
+import org.json.simple.JSONObject;
 
 public class Software implements Comparable<Software> {
 	private String name;
@@ -35,7 +36,7 @@ public class Software implements Comparable<Software> {
 	}
 	
 	public String toString() {
-		return "{ name : " + name + ", versionString : " + versionString + ", publisher : " + publisher + " }";
+		return "{ \"name\" : \"" + JSONObject.escape(name) + "\", \"versionString\" : \"" + JSONObject.escape(versionString) + "\", \"publisher\" : \"" + JSONObject.escape(publisher) + "\" }";
 	}
 
 	@Override
