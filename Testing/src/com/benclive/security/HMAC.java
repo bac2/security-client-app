@@ -1,3 +1,4 @@
+package com.benclive.security;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -24,10 +25,10 @@ public class HMAC {
 			Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
 			byte[] macAddress = null;
 			String hostname = "";
-			while (en.hasMoreElements() && macAddress == null) {
+			while (en.hasMoreElements() && (macAddress == null || macAddress.length == 0)) {
 				NetworkInterface network = en.nextElement();
 				Enumeration<InetAddress> addresses = network.getInetAddresses();
-				while (addresses.hasMoreElements() && macAddress == null) {
+				while (addresses.hasMoreElements() && (macAddress == null || macAddress.length == 0)) {
 					InetAddress ip = addresses.nextElement();
 
 					NetworkInterface netinterface = NetworkInterface.getByInetAddress(ip);

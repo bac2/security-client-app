@@ -1,3 +1,4 @@
+package com.benclive.security;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;

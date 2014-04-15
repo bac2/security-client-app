@@ -1,3 +1,4 @@
+package com.benclive.security;
 import org.json.simple.JSONObject;
 
 public class Software implements Comparable<Software> {
