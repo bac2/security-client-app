@@ -12,27 +12,26 @@ import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
-import java.util.List;
 
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 
 public class MainView extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4749512847347806958L;
 	private JPanel mainPanel;
 	private JTextArea infoLabel;
 	private Controller controller;
@@ -142,7 +141,6 @@ public class MainView extends JFrame {
 			return;
 		}
 	
-		final MainView m = this;
 		final TrayIcon trayIcon = new TrayIcon(createImage("/test.png", "tray icon"));
 		trayIcon.addActionListener(new OpenListener());
 		

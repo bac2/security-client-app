@@ -2,7 +2,6 @@ package com.benclive.security;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
@@ -59,6 +58,7 @@ public class HMAC {
 	}
 	public String toHexString(byte[] bytes) {
 		
+		@SuppressWarnings("resource")
 		Formatter formatter = new Formatter();
 		for (byte b : bytes) {
 		formatter.format("%02x", b);

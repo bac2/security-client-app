@@ -9,6 +9,10 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 public class SoftwareView extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3744767380326619494L;
 	private JList<Software> jSoftwareList;
 	private List<Software> softwareList;
 	private DefaultListModel<Software> softwareListModel;

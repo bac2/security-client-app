@@ -1,6 +1,5 @@
 package com.benclive.security;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.TimerTask;
 public class Controller {
 	
 	private List<Software> softwareList;
-	private MainView main;
 	private String uniqueId;
 	private Properties configFile;
 	private ITransport transport;
@@ -42,7 +40,7 @@ public class Controller {
         
         
         //Start the GUI
-		main = new MainView("Security Client", this);
+		new MainView("Security Client", this);
 
 	}
 	
@@ -109,7 +107,7 @@ public class Controller {
 		}
 	}
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
 		String osName = System.getProperty("os.name");
 		IFileGatherer fileGatherer;
 		
