@@ -35,9 +35,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class MainView extends JFrame {
 	private JPanel mainPanel;
 	private JTextArea infoLabel;
-	private JList<Software> softwareList;
-	private DefaultListModel<Software> softwareListModel;
 	private Controller controller;
+	private MainView m = this;
 	
 	public MainView(String title, Controller c) {
 		this.setTitle(title);
@@ -66,7 +65,7 @@ public class MainView extends JFrame {
 		}
 		Font f = new Font("Sans", Font.PLAIN, 18);
 		this.setSize(450, 300);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		
 		mainPanel = new JPanel();
@@ -85,21 +84,23 @@ public class MainView extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		this.setJMenuBar(menuBar);
 		
-		JMenu menu = new JMenu("My Menu");
+		JMenu menu = new JMenu("Options");
 		menuBar.add(menu);
 		
-		JMenuItem menuItem = new JMenuItem("Default menu item");
+		JMenuItem menuItem = new JMenuItem("Show installed software");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFrame view = new SoftwareView(controller.getSoftwareList());
+				view.setVisible(true);
+			}
+		});
 		menu.add(menuItem);
 		
+		JMenuItem exitItem = new JMenuItem("Exit");
+		exitItem.addActionListener(new ExitListener());
+		menu.add(exitItem);
 		
-		softwareListModel = new DefaultListModel<Software>();
-		softwareList = new JList<Software>(softwareListModel);
-		softwareList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		for (Software s : controller.getSoftwareList()) {
-			softwareListModel.addElement(s);	
-		}
-		JScrollPane scroller = new JScrollPane(softwareList);
-		//mainPanel.add(scroller);
 		
 		JPanel centrePanel = new JPanel();
 		centrePanel.setLayout(new GridLayout(3,1));
@@ -143,32 +144,14 @@ public class MainView extends JFrame {
 	
 		final MainView m = this;
 		final TrayIcon trayIcon = new TrayIcon(createImage("/test.png", "tray icon"));
-		trayIcon.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				m.setVisible(true);
-			}
-			
-		});
+		trayIcon.addActionListener(new OpenListener());
 		
 		final SystemTray tray = SystemTray.getSystemTray();
 		final PopupMenu popup = new PopupMenu();
 		MenuItem showItem = new MenuItem("Open");
-		showItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				m.setVisible(true);
-			}
-		});
+		showItem.addActionListener(new OpenListener());
 		MenuItem closeItem = new MenuItem("Exit");
-		closeItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				m.dispose();
-				controller.shutdown();
-			}
-		});
+		closeItem.addActionListener(new ExitListener());
 		
 		popup.add(showItem);
 		popup.add(closeItem);
@@ -186,12 +169,7 @@ public class MainView extends JFrame {
 		mainPanel.add(centrePanel);
 		
 	}
-	
-	public void addElementToSoftwareList(Software element) {
-		softwareListModel.addElement(element);
-		revalidate();
-		repaint();
-	}
+
 	
 	//Obtain the image URL
     protected static Image createImage(String path, String description) {
@@ -203,5 +181,20 @@ public class MainView extends JFrame {
         } else {
             return (new ImageIcon(imageURL, description)).getImage();
         }
+    }
+    
+    private class ExitListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			m.dispose();
+			controller.shutdown();
+		}
+    }
+    
+    private class OpenListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			m.setVisible(true);
+		}
     }
 }
