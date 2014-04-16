@@ -33,6 +33,7 @@ public class Controller {
 	    this.fileGatherer = ifileGatherer;
 	    softwareList = fileGatherer.getInstalledSoftwareList();
 	    
+	    
 	    //Check for new software and send the list every hour
         Timer timer = new Timer();
         update = new UpdateTask();
@@ -100,6 +101,8 @@ public class Controller {
     	        jsonEnc.encodeList(softwareList);
     	        jsonEnc.encodeDeviceName("My Arbitrary Device");
     	        jsonEnc.encodeOS(System.getProperty("os.name"));
+    	        
+    	        System.out.println(jsonEnc.getEncodedList());
         		
     	        //Send it
         		transport.sendString(jsonEnc.getEncodedList());
