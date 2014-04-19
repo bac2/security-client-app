@@ -15,11 +15,15 @@ public class Controller {
 	private ITransport transport;
 	private IFileGatherer fileGatherer;
 	private TimerTask update;
+	private String SERVER_URI;
+	private boolean registered;
+	private boolean registrationChecked;
 	
 	public Controller(IFileGatherer ifileGatherer) {
+		
 		//Load the config file
 		configFile = getConfig();
-		
+
 		//Generate our Unique ID
         HMAC hmac = new HMAC();
         try {
@@ -29,16 +33,17 @@ public class Controller {
 		}
 
 		//Set up variables
-	    transport = new HTTPTransport(uniqueId);
+        registered = false;
+        registrationChecked = false;
+        SERVER_URI = configFile.getProperty("server");
+	    transport = new HTTPTransport(uniqueId, SERVER_URI);
 	    this.fileGatherer = ifileGatherer;
 	    softwareList = fileGatherer.getInstalledSoftwareList();
-	    
-	    
+    
 	    //Check for new software and send the list every hour
         Timer timer = new Timer();
         update = new UpdateTask();
         timer.scheduleAtFixedRate(update, 1000, 1000*60*60); //Send every hour after startup.
-        
         
         //Start the GUI
 		new MainView("VulMo Vulnerability Monitor", this);
@@ -69,8 +74,7 @@ public class Controller {
 		}
 	    return configFile;
 	}
-	//TODO: Implement GUI
-
+	
 	public List<Software> getSoftwareList() {
 		return softwareList;
 	}
@@ -79,13 +83,18 @@ public class Controller {
 		return uniqueId;
 	}
 
-	public void setRegistered(boolean b) {
-		configFile.put("registered", Boolean.toString(b));
-		saveConfig();
-	}
-
-	public boolean isRegistered() {
-		return configFile.get("registered").equals("true");
+	public synchronized boolean isRegistered() {
+		try {
+			if (!registrationChecked) {
+				registered = transport.isRegistered();
+				registrationChecked = true;
+			}
+			return registered;
+		} catch (IOException e) {
+			//Could not connect to server :(
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	private class UpdateTask extends TimerTask {
@@ -128,6 +137,18 @@ public class Controller {
 		update.cancel();
 		saveConfig();
 		System.exit(0);
+	}
+
+	public String getServerURI() {
+		return SERVER_URI;
+	}
+
+	public void setServer(String serverURL) {
+		configFile.setProperty("server", serverURL);
+		System.out.println(serverURL);
+		SERVER_URI = serverURL;
+		transport = new HTTPTransport(uniqueId, SERVER_URI);
+		saveConfig();
 	}
 
 }

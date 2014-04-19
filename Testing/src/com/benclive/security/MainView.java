@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -30,33 +29,18 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import java.awt.FlowLayout;
-
 import javax.swing.BoxLayout;
-import javax.swing.border.BevelBorder;
-
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-import javax.swing.border.TitledBorder;
-import javax.swing.border.SoftBevelBorder;
-
 import java.awt.CardLayout;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 
 import java.awt.Component;
 
-import javax.swing.Box;
 
 import java.awt.SystemColor;
-import java.awt.Window.Type;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingConstants;
 
@@ -83,10 +67,25 @@ public class MainView extends JFrame {
 		menuBar.add(mnNewMenu);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Show installed software");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SoftwareView s = new SoftwareView(controller.getSoftwareList());
+				s.setVisible(true);
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Exit");
 		mntmNewMenuItem_1.addActionListener(new ExitListener());
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Preferences");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame options = new SettingsView(controller);
+				options.setVisible(true);
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_3);
 		mnNewMenu.add(mntmNewMenuItem_1);
 		
 		JMenu mnNewMenu_1 = new JMenu("Help");
@@ -122,18 +121,6 @@ public class MainView extends JFrame {
 		mainPanel = new JPanel();
 		mainPanel.setBorder(null);
 		getContentPane().add(mainPanel, BorderLayout.NORTH);
-
-			JButton registeredButton = new JButton("I have registered");
-			registeredButton.setFont(f);
-			//centrePanel.add(registeredButton);
-			
-			registeredButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					controller.setRegistered(true);
-					
-				}
-			});
 
 		
 		//Enable the systray to be used.
@@ -255,9 +242,15 @@ public class MainView extends JFrame {
 		lblNewLabel.setIcon(new ImageIcon(MainView.class.getResource("/javax/swing/plaf/metal/icons/ocean/warning.png")));
 		panel.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("No software found");
+		JLabel lblNewLabel_1 = new JLabel("No applications discovered");
 		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 16));
 		panel.add(lblNewLabel_1);
+		
+		int numSoftware = controller.getSoftwareList().size();
+		if (numSoftware > 0) {
+			lblNewLabel_1.setText(numSoftware + " installed applications");
+			lblNewLabel.setIcon(new ImageIcon(MainView.class.getResource("/javax/swing/plaf/metal/icons/ocean/info.png")));
+		}
 		
 		cardPanel = new JPanel();
 		GridBagConstraints gbc_cardPanel = new GridBagConstraints();
@@ -320,8 +313,12 @@ public class MainView extends JFrame {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.setRegistered(true);
-				setRegisteredPanel();
+				if (controller.isRegistered()) {
+					setRegisteredPanel();
+				} else {
+					//Error message?
+					
+				}
 			}
 		});
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
@@ -347,7 +344,7 @@ public class MainView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Desktop d = Desktop.getDesktop();
 				try {
-					d.browse(new URI("http://bubuntu-vm:8000/"));
+					d.browse(new URI(controller.getServerURI()));
 				} catch (IOException | URISyntaxException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

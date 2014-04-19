@@ -5,25 +5,42 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
 
 
 public class HTTPTransport implements ITransport {
 
 	private String host, addr;
-	private int port;
-	public HTTPTransport(String deviceUid) {
-		host = "http://bubuntu-vm";
+	public HTTPTransport(String deviceUid, String server) {
+		host = server;
 		addr = "/device/" + deviceUid + "/";
-		port = 8000;
 
 	}
+	
+	public boolean isRegistered() throws IOException {
+		URL dest;
+		HttpURLConnection conn = null;
+		try {
+			dest = new URL(host + addr);
+			conn = (HttpURLConnection) dest.openConnection();
+
+			if (conn.getResponseCode() == 200) {
+				return true;
+			}
+			conn.disconnect();
+			
+		} catch (IOException e) {
+			throw e;
+		}
+		return false;
+	}
+	
+	
 	@Override
 	public void sendString(String data) {
 		URL dest;
 		HttpURLConnection conn = null;
 		try {
-			dest = new URL(host + ":" + port + addr);
+			dest = new URL(host + addr);
 			conn = (HttpURLConnection) dest.openConnection();
 			conn.setDoOutput(true);
 			conn.setDoInput(true);
@@ -35,21 +52,19 @@ public class HTTPTransport implements ITransport {
 			out.write(data);
 			out.flush();
 			out.close();
-			
-			System.out.println(conn.getResponseCode());
-			InputStreamReader in;
-			if (conn.getResponseCode() != 200) {
-				in = new InputStreamReader(conn.getErrorStream());
-			} else {
-				in = new InputStreamReader(conn.getInputStream());
+
+			if (conn.getResponseCode() == 200) {
+				conn.disconnect();
+				return;
 			}
+			
+			//Error case
+			InputStreamReader in = new InputStreamReader(conn.getErrorStream());
 
 			StringBuffer inputString = new StringBuffer();
 			while(in.ready()) {
 				inputString.append((char) in.read());
 			}
-			//System.out.println("Data: "+ inputString.toString());
-			conn.disconnect();
 			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

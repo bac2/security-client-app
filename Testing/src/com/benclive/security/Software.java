@@ -1,7 +1,8 @@
 package com.benclive.security;
+import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
-public class Software implements Comparable<Software> {
+public class Software implements Comparable<Software>, JSONAware {
 	private String name;
 	private String versionString;
 	private String publisher;
@@ -36,8 +37,20 @@ public class Software implements Comparable<Software> {
 		return versionString;
 	}
 	
-	public String toString() {
+	public String toJSONString() {
 		return "{ \"name\" : \"" + JSONObject.escape(name) + "\", \"versionString\" : \"" + JSONObject.escape(versionString) + "\", \"publisher\" : \"" + JSONObject.escape(publisher) + "\" }";
+	}
+	
+	public String toString() {
+		String title =  name;
+		if (versionString != null) {
+			title += " " + versionString;
+		}
+		if (publisher != null) {
+			title += " by " + publisher;
+		}
+		return title;
+		
 	}
 
 	@Override

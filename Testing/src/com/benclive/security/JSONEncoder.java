@@ -8,6 +8,7 @@ public class JSONEncoder implements IEncoder {
 	private JSONObject obj;
 	private JSONObject meta;
 	
+	@SuppressWarnings("unchecked")
 	public JSONEncoder() {
 		obj = new JSONObject();
 		meta = new JSONObject();
@@ -18,6 +19,7 @@ public class JSONEncoder implements IEncoder {
 	public void encodeList(List<Software> softwareList) {
 		JSONArray arr = new JSONArray();
 		arr.addAll(softwareList);
+		
 		obj.put("software", arr);
 	}
 	
@@ -26,12 +28,14 @@ public class JSONEncoder implements IEncoder {
 		return obj.toJSONString();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void encodeDeviceName(String nickname) {
 		meta.put("nickname", nickname);
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void encodeOS(String os) {
 		meta.put("os_name", os);
