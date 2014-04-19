@@ -41,7 +41,7 @@ public class Controller {
         
         
         //Start the GUI
-		new MainView("Security Client", this);
+		new MainView("VulMo Vulnerability Monitor", this);
 
 	}
 	
