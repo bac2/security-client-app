@@ -342,6 +342,19 @@ public class MainView extends JFrame {
 		panel_2.setLayout(gbl_panel_2);
 		
 		JButton btnNewButton_2 = new JButton("My Account");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Desktop d = Desktop.getDesktop();
+				try {
+					d.browse(new URI("http://bubuntu-vm:8000/"));
+				} catch (IOException | URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
 		gbc_btnNewButton_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNewButton_2.gridx = 0;
