@@ -18,6 +18,7 @@ public class Controller {
 	private String SERVER_URI;
 	private boolean registered;
 	private boolean registrationChecked;
+	private String DEFAULT_SERVER = "http://bubuntu-vm:8000";
 	
 	public Controller(IFileGatherer ifileGatherer) {
 		
@@ -36,6 +37,9 @@ public class Controller {
         registered = false;
         registrationChecked = false;
         SERVER_URI = configFile.getProperty("server");
+        if (SERVER_URI == null) {
+        	SERVER_URI = DEFAULT_SERVER;
+        }
 	    transport = new HTTPTransport(uniqueId, SERVER_URI);
 	    this.fileGatherer = ifileGatherer;
 	    softwareList = fileGatherer.getInstalledSoftwareList();
