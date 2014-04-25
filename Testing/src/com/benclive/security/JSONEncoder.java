@@ -30,13 +30,6 @@ public class JSONEncoder implements IEncoder {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void encodeDeviceName(String nickname) {
-		meta.put("nickname", nickname);
-		
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
 	public void encodeOS(String os) {
 		meta.put("os_name", os);
 		

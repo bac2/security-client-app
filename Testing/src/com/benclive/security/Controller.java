@@ -112,7 +112,6 @@ public class Controller {
         		//Encode it in JSON
     	        JSONEncoder jsonEnc = new JSONEncoder();
     	        jsonEnc.encodeList(softwareList);
-    	        jsonEnc.encodeDeviceName("My Arbitrary Device");
     	        jsonEnc.encodeOS(System.getProperty("os.name"));
     	        
     	        System.out.println(jsonEnc.getEncodedList());

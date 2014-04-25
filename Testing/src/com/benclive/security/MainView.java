@@ -54,6 +54,8 @@ public class MainView extends JFrame {
 	private Controller controller;
 	private MainView m = this;
 	private JPanel cardPanel;
+	private SoftwareView softwareView;
+	private SettingsView settingsView;
 	
 	public MainView(String title, Controller c) {
 		setResizable(false);
@@ -69,8 +71,10 @@ public class MainView extends JFrame {
 		JMenuItem mntmNewMenuItem = new JMenuItem("Show installed software");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SoftwareView s = new SoftwareView(controller.getSoftwareList());
-				s.setVisible(true);
+				if (softwareView == null) {
+					softwareView = new SoftwareView(controller.getSoftwareList());
+				}
+				softwareView.setVisible(true);
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem);
@@ -81,8 +85,10 @@ public class MainView extends JFrame {
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Preferences");
 		mntmNewMenuItem_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame options = new SettingsView(controller);
-				options.setVisible(true);
+				if (settingsView == null) {
+					settingsView = new SettingsView(controller);
+				}
+				settingsView.setVisible(true);
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem_3);
