@@ -281,7 +281,7 @@ public class MainView extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				Desktop d = Desktop.getDesktop();
 				try {
-					d.browse(new URI("http://localhost:8000/device/add"));
+					d.browse(new URI(controller.getServerURI() + "/add_device"));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
